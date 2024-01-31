@@ -448,7 +448,7 @@ def generate_lua_script(mapped_block_data, filename):
         lua_lines.append("    outOfStock()")
         lua_lines.append("  end")
         lua_lines.append("end")
-        lua_lines.append(f"moveTo({x}, {y}, {z})")
+        lua_lines.append(f"moveTo({x+1}, {y+1}, {z+1})")
         lua_lines.append("turtle.placeDown()")
         lua_lines.append(f"placedBlocks['{block_name}'] = (placedBlocks['{block_name}'] or 0) + 1")
 

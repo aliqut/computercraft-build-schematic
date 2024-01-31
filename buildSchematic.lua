@@ -175,11 +175,11 @@ local function restockBlocks()
   moveTo(0, 0, 0)  -- Move to chest location
   turtle.turnRight()
   turtle.turnRight()
-  turtle.forward()
-  turtle.forward()
   while currentDir ~= 0 do
    turnLeft()
   end
+  turtle.forward()
+  turtle.forward()
   for i = 1, 16 do
     turtle.suck()
   end
@@ -195,11 +195,11 @@ local function outOfStock()
   moveTo(0, 0, 0)  -- Move to chest location
   turtle.turnRight()
   turtle.turnRight()
-  turtle.forward()
-  turtle.forward()
   while currentDir ~= 0 do
    turnLeft()
   end
+  turtle.forward()
+  turtle.forward()
   print('Please refill chest, then press any key to continue...')
   os.pullEvent('key')
   for i = 1, 16 do

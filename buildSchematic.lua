@@ -71,42 +71,81 @@ local function moveDownWithCheck()
     return false
 end
 
-local function tryAlternatePaths()
-    -- Attempt to move left or right to bypass the obstacle
-    turnRight()
-    if moveForwardWithCheck() then
-        updatePosition("forward")
-        turnLeft()  -- Realign to original direction
-        return true
+local function tryMove(direction, steps)
+    for i = 1, steps do
+        local moved = false
+        if direction == 'forward' then
+            moved = moveForwardWithCheck()
+            if moved then updatePosition('forward') end
+        elseif direction == 'up' then
+            moved = moveUpWithCheck()
+            if moved then updatePosition('up') end
+        elseif direction == 'down' then
+            moved = moveDownWithCheck()
+            if moved then updatePosition('down') end
+        end
+        if not moved then
+            return false -- Stop if unable to move further in this direction
+        end
     end
-    turnLeft()  -- Turn back to original direction
-    turnLeft()
-    if moveForwardWithCheck() then
-        updatePosition("forward")
-        turnRight()  -- Realign to original direction
-        return true
-    end
-    turnRight()  -- Turn back to original direction
-    return false
+    return true
 end
 
-local function moveTo(x, y, z)
-    -- Vertical movement
-    while currentY < y do
-        if moveUpWithCheck() then
-            updatePosition("up")
-        elseif not tryAlternatePaths() then
-            -- Handle failure to find a path
+local function tryAlternatePaths()
+    local depth = 3 -- Set the search depth
+
+    local function recursiveTryPaths(currentDepth)
+        if currentDepth == 0 then
+            return false
         end
-    end
-    while currentY > y do
-        if moveDownWithCheck() then
-            updatePosition("down")
-        elseif not tryAlternatePaths() then
-            -- Handle failure to find a path
+
+        if tryMove('forward', 1) then
+            return true
         end
+
+        if tryMove('up', 1) then
+            local success = recursiveTryPaths(currentDepth - 1)
+            if not success then moveDownWithCheck() end
+            return success
+        end
+
+        if tryMove('down', 1) then
+            local success = recursiveTryPaths(currentDepth - 1)
+            if not success then moveUpWithCheck() end
+            return success
+        end
+
+        -- Attempt lateral movements
+        turnRight()
+        if tryMove('forward', 1) then
+            local success = recursiveTryPaths(currentDepth - 1)
+            if not success then
+                moveBackWithCheck() -- Undo move if it leads to a dead end
+            end
+            turnLeft() -- Correct orientation
+            return success
+        end
+        turnLeft() -- Return to original direction for the next attempt
+
+        turnLeft()
+        if tryMove('forward', 1) then
+            local success = recursiveTryPaths(currentDepth - 1)
+            if not success then
+                moveBackWithCheck() -- Undo move if it leads to a dead end
+            end
+            turnRight() -- Correct orientation
+            return success
+        end
+        turnRight() -- Return to original direction
+
+        return false -- No paths found within the given depth
     end
 
+    return recursiveTryPaths(depth)
+end
+
+
+local function moveTo(x, y, z)
     -- Horizontal movement (X-axis)
     while currentX < x do
         while currentDir ~= 1 do
@@ -150,6 +189,22 @@ local function moveTo(x, y, z)
             -- Handle failure to find a path
         end
     end
+    -- Vertical movement
+    while currentY < y do
+        if moveUpWithCheck() then
+            updatePosition("up")
+        elseif not tryAlternatePaths() then
+            -- Handle failure to find a path
+        end
+    end
+    while currentY > y do
+        if moveDownWithCheck() then
+            updatePosition("down")
+        elseif not tryAlternatePaths() then
+            -- Handle failure to find a path
+        end
+    end
+
 end
 
 local function pickUpBlocks()

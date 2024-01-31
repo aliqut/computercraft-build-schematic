@@ -18,3 +18,5 @@ For contributions, fork this repo, and in your fork, make any modifications you 
 ## Notes
 - Ensure that the entire building space is empty.
 - The building blocks' chest must be placed directly behind the Turtle, leaving a two-block gap. Ensure that you place the chest in the block opposite the direction the Turtle is facing.
+- The programs ignored any blocks with attributes from the schematic file, for example, stairs, trapdoors, etc. It will only write instructions for full blocks.
+- Ensure your schematic does not need more than 16 different block types, and fill the chest only with 16 slots worth of blocks. Refill the same 16 slots when necessary.

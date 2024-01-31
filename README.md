@@ -7,7 +7,7 @@ This program takes in a WorldEdit schematic file, and converts it to a Lua scrip
 - Python ( [Link](https://www.python.org/downloads/) )
 
 ## Usage
-1. Place your WorldEdit.schematic file in the same folder as the program.
+1. Place your WorldEdit.schematic file and the minecraftIDs.txt file in the same folder as the schematicToLua Python script.
 2. Run schematicToLua.py
 3. Enter the schematic file name in the terminal window, and wait for the Lua script to be generated.
 4. In-game, place a Turtle down, and go into your Minecraft profile's save folder, find the folder for the world you are in, and go to the "computer" folder. Then, find the folder with the ID number of the Turtle you have just placed down, you can check this by typing "id" into the Turtle's terminal.

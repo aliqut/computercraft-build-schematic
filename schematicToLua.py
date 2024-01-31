@@ -365,14 +365,26 @@ def generate_lua_script(mapped_block_data, filename):
 
     print(f"Lua script written to {filename}")
 
-# MAIN CODE
+def main():
 
-file_path = 'minecraftIDs.txt' 
-block_id_mapping = create_block_mapping(file_path) # Now block_id_mapping contains a dictionary where keys are ID numbers and values are tuples (Minecraft name, data value)
+    while True:
+        schematic_file = input("Enter the name of the schematic file, do not forget the file extension: ")
+        if os.path.exists(schematic_file):
+            break
+        else:
+            print("File not found. Please enter a valid file name.")
 
-schematic = read_schematic('test.schematic')
-blockData = extract_block_data(schematic)
+    file_path = 'minecraftIDs.txt' 
+    block_id_mapping = create_block_mapping(file_path) # Now block_id_mapping contains a dictionary where keys are ID numbers and values are tuples (Minecraft name, data value)
 
-mappedData = map_block_data_to_names(blockData, block_id_mapping)
+    schematic = read_schematic(schematic_file)
+    blockData = extract_block_data(schematic)
 
-generate_lua_script(mappedData, 'buildSchematic.lua')
+    mappedData = map_block_data_to_names(blockData, block_id_mapping)
+
+    generate_lua_script(mappedData, 'buildSchematic.lua')
+
+    input("Script generated. RETURN to exit...")
+
+if __name__ == "__main__":
+    main()

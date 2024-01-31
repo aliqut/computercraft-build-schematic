@@ -13,19 +13,19 @@ def main():
         else:
             print("File not found. Please enter a valid file name.")
 
-    # Path to item ID dictionary text file
-    file_path = 'minecraftIDs.txt' 
-    block_id_mapping = create_block_mapping(file_path) # Now block_id_mapping contains a dictionary where keys are ID numbers and values are tuples (Minecraft name, data value)
+    # Path to item ID dictionary text file **NOT IN USE, ONLY FOR 1.12.X and below**
+#    file_path = 'minecraftIDs.txt' 
+#    block_id_mapping = create_block_mapping(file_path) # Now block_id_mapping contains a dictionary where keys are ID numbers and values are tuples (Minecraft name, data value)
 
     # Read schematic and extract data to an array
-    schematic = read_schematic(schematic_file)
-    blockData = extract_block_data(schematic)
+    palette, block_states, width, height, length = read_schematic(schematic_file)
+    blockData = extract_block_data(palette, block_states, width, height, length)
 
-    # Map extracted data to item IDs readable by ComputerCraft
-    mappedData = map_block_data_to_names(blockData, block_id_mapping)
+    # Map extracted data to item IDs readable by ComputerCraft **NOT IN USE, ONLY FOR 1.12.x and below**
+#    mappedData = map_block_data_to_names(blockData, block_id_mapping)
 
     # Sort data array to optimise pathfinding
-    sortedData = sortBlockDataIncrementingY(mappedData)
+    sortedData = sortBlockDataIncrementingY(blockData)
 
     # Generate Lua script
     generate_lua_script(sortedData, 'buildSchematic.lua')
@@ -42,7 +42,15 @@ def read_schematic(filename):
     # Load the schematic file
     schematic = nbtlib.load(file_path)
     
-    return schematic
+    width = schematic['Width']
+    height = schematic['Height']
+    length = schematic['Length']
+    palette = {v: k for k, v in schematic['Palette'].items()}
+
+    # Assuming block states are stored in block_data
+    block_states = list(schematic['BlockData'])
+
+    return palette, block_states, width, height, length
 
 # Write data to file
 def write_to_file(data, filename):
@@ -81,32 +89,24 @@ def create_block_mapping(file_path):
     return block_mapping
 
 # Extract block data from schematic
-def extract_block_data(nbt_data):
-    # Extract block data and dimensions
-    blocks = nbt_data['Blocks']
-    data = nbt_data['Data']
-    width = nbt_data['Width']
-    height = nbt_data['Height']
-    length = nbt_data['Length']
-
-    # Create a list to store non-air block data
+def extract_block_data(palette, block_states, width, height, length):
     structure = []
-
-    # Fill the list with non-air block data
     for y in range(height):
         for z in range(length):
             for x in range(width):
-                # Calculate the index in the linear block array
                 index = y * width * length + z * width + x
-                block_id = blocks[index]
-                block_data = data[index]
+                block_state = block_states[index]
+                block_id = palette[block_state]
 
-                # Skip air blocks (block ID 0)
-                if block_id != 0:
-                    # Store the block information along with its coordinates
-                    structure.append(((x, y, z), block_id, block_data))
+                # Skip air blocks and blocks with additional properties, eg: stairs, slabs, trapdoors. Only read full blocks
+                if block_id == "minecraft:air" or '[' in block_id:
+                    continue
+
+                structure.append(((x, y, z), block_id))
 
     return structure
+
+
 
 # Map extracted block data to minecraft IDs
 def map_block_data_to_names(block_data, block_mapping):
@@ -164,8 +164,8 @@ def sortBlockData(mapped_block_data):
 def sortBlockDataIncrementingY(mapped_block_data):
     # Group blocks by Y-coordinate
     groups = defaultdict(list)
-    for coord, block_name, block_damage in mapped_block_data:
-        groups[coord[1]].append((coord, block_name, block_damage))
+    for coord, block_name in mapped_block_data:
+        groups[coord[1]].append((coord, block_name))
 
     sorted_data = []
     for y in sorted(groups.keys()):
@@ -184,18 +184,17 @@ def sortBlockDataIncrementingY(mapped_block_data):
 def generate_lua_script(mapped_block_data, filename):
     # Count block types and quantities
     block_counts = {}
-    for _, block_name, block_damage in mapped_block_data:
-        block_key = (block_name, block_damage)
-        if block_key not in block_counts:
-            block_counts[block_key] = 0
-        block_counts[block_key] += 1
+    for _, block_name in mapped_block_data:
+        if block_name not in block_counts:
+            block_counts[block_name] = 0
+        block_counts[block_name] += 1
 
     # Initialize Lua script lines
     lua_lines = [
-        "local function selectBlock(blockName, blockDamage)",
+        "local function selectBlock(blockName)",
         "  for i = 1, 16 do",
         "    local detail = turtle.getItemDetail(i)",
-        "    if detail and detail.name == blockName and detail.damage == blockDamage then",
+        "    if detail and detail.name == blockName then",
         "      turtle.select(i)",
         "      return true",
         "    end",
@@ -424,8 +423,8 @@ def generate_lua_script(mapped_block_data, filename):
     # lua_lines.append("}")
 
     # Print out the list of blocks needed
-    for (block_name, block_damage), count in block_counts.items():
-        lua_lines.append(f"print('Block {block_name} with damage {block_damage}: {count} blocks')")
+    for block_name, count in block_counts.items():
+        lua_lines.append(f"print('Block {block_name}: {count} blocks')")
 
     # Add user prompt
     lua_lines.append("print('Please organize the blocks in the chest as listed above.')")
@@ -439,10 +438,10 @@ def generate_lua_script(mapped_block_data, filename):
     
 
     # Add building instructions
-    for (x, y, z), block_name, block_damage in mapped_block_data:
-        lua_lines.append(f"if not selectBlock('{block_name}', {block_damage}) then")
+    for (x, y, z), block_name in mapped_block_data:
+        lua_lines.append(f"if not selectBlock('{block_name}') then")
         lua_lines.append("  restockBlocks()")
-        lua_lines.append(f"  if not selectBlock('{block_name}', {block_damage}) then")
+        lua_lines.append(f"  if not selectBlock('{block_name}') then")
         lua_lines.append("    print('Error: Block not found:')")
         lua_lines.append(f"    print('{block_name}')")
         lua_lines.append("    outOfStock()")
@@ -453,6 +452,7 @@ def generate_lua_script(mapped_block_data, filename):
         lua_lines.append(f"placedBlocks['{block_name}'] = (placedBlocks['{block_name}'] or 0) + 1")
 
     lua_lines.append("print('Completed')")
+    lua_lines.append("moveTo(0,0,0)")
 
     # Write the Lua script to a file
     with open(filename, 'w') as file:

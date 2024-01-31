@@ -207,6 +207,68 @@ local function moveTo(x, y, z)
 
 end
 
+local function moveToPrioritiseY(x, y, z)
+    -- Vertical movement
+    while currentY < y do
+        if moveUpWithCheck() then
+            updatePosition("up")
+        elseif not tryAlternatePaths() then
+            -- Handle failure to find a path
+        end
+    end
+    while currentY > y do
+        if moveDownWithCheck() then
+            updatePosition("down")
+        elseif not tryAlternatePaths() then
+            -- Handle failure to find a path
+        end
+    end
+    -- Horizontal movement (X-axis)
+    while currentX < x do
+        while currentDir ~= 1 do
+           turnLeft()
+        end
+        if moveForwardWithCheck() then
+            updatePosition("forward")
+        elseif not tryAlternatePaths() then
+            -- Handle failure to find a path
+        end
+    end
+    while currentX > x do
+        while currentDir ~= 3 do
+           turnLeft()
+        end
+        if moveForwardWithCheck() then
+            updatePosition("forward")
+        elseif not tryAlternatePaths() then
+    -- Handle failure to find a path
+        end
+    end
+
+    -- Horizontal movement (Z-axis)
+    while currentZ < z do
+        while currentDir ~= 0 do
+           turnLeft()
+        end
+        if moveForwardWithCheck() then
+            updatePosition("forward")
+        elseif not tryAlternatePaths() then
+            -- Handle failure to find a path
+        end
+    end
+    while currentZ > z do
+        while currentDir ~= 2 do
+           turnLeft()
+        end
+        if moveForwardWithCheck() then
+            updatePosition("forward")
+        elseif not tryAlternatePaths() then
+            -- Handle failure to find a path
+        end
+    end
+
+end
+
 local function pickUpBlocks()
   turtle.turnRight()
   turtle.turnRight()
@@ -242,7 +304,7 @@ local function restockBlocks()
   turtle.turnLeft()
   turtle.forward()
   turtle.forward()
-  moveTo(lastX, lastY, lastZ)  -- Return to the last building position
+  moveToPrioritiseY(lastX, lastY, lastZ)  -- Return to the last building position
 end
 local function outOfStock()
   local lastX, lastY, lastZ = currentX, currentY, currentZ
@@ -264,7 +326,7 @@ local function outOfStock()
   turtle.turnLeft()
   turtle.forward()
   turtle.forward()
-  moveTo(lastX, lastY, lastZ)  -- Return to the last building position
+  moveToPrioritiseY(lastX, lastY, lastZ)  -- Return to the last building position
 end
 print('Block minecraft:stone_bricks: 542 blocks')
 print('Block minecraft:spruce_planks: 256 blocks')

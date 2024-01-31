@@ -1,5 +1,36 @@
 import os
 import nbtlib
+import math
+from collections import defaultdict
+
+# MAIN CODE
+def main():
+    # Terminal UI
+    while True:
+        schematic_file = input("Enter the name of the schematic file, do not forget the file extension: ")
+        if os.path.exists(schematic_file):
+            break
+        else:
+            print("File not found. Please enter a valid file name.")
+
+    # Path to item ID dictionary text file
+    file_path = 'minecraftIDs.txt' 
+    block_id_mapping = create_block_mapping(file_path) # Now block_id_mapping contains a dictionary where keys are ID numbers and values are tuples (Minecraft name, data value)
+
+    # Read schematic and extract data to an array
+    schematic = read_schematic(schematic_file)
+    blockData = extract_block_data(schematic)
+
+    # Map extracted data to item IDs readable by ComputerCraft
+    mappedData = map_block_data_to_names(blockData, block_id_mapping)
+
+    # Sort data array to optimise pathfinding
+    sortedData = sortBlockDataIncrementingY(mappedData)
+
+    # Generate Lua script
+    generate_lua_script(sortedData, 'buildSchematic.lua')
+
+    input("Script generated. RETURN to exit...")
 
 # Read .schem files
 def read_schematic(filename):
@@ -10,7 +41,6 @@ def read_schematic(filename):
 
     # Load the schematic file
     schematic = nbtlib.load(file_path)
-    # Further processing will go here
     
     return schematic
 
@@ -91,13 +121,65 @@ def map_block_data_to_names(block_data, block_mapping):
     for (x, y, z), block_id, block_metadata in block_data:
         if block_id in block_mapping:
             block_name, block_damage = block_mapping[block_id]
-            # Optionally, you can adjust block_damage based on block_metadata if needed
             mapped_data.append(((x, y, z), block_name, block_damage))
         else:
             # Handle unknown block IDs
             mapped_data.append(((x, y, z), "unknown", 0))
 
     return mapped_data
+
+# Find distance between 2 3D co-ordinates
+def distanceTwoCoords(coord1, coord2):
+    return ((coord2[0]-coord1[0])**2 + (coord2[1]-coord1[1])**2 + (coord2[2]-coord1[2])**2)**(1/2)
+
+# Find distance between 2 2D co-ordinates
+def distance_2d(coord1, coord2):
+    # Calculate distance ignoring the Y-coordinate
+    return math.sqrt((coord1[0] - coord2[0])**2 + (coord1[2] - coord2[2])**2)
+
+# Sort block array by distance to optimise pathfinding
+def sortBlockData(mapped_block_data):
+    n = len(mapped_block_data)
+    for i in range(n):
+        swapped = False
+        for j in range(0, n - i - 1):
+            # Calculate the reference point (previous block or origin)
+            ref_point = mapped_block_data[j - 1][0] if j > 0 else (0, 0, 0)
+
+            # Current and next distances from the reference point
+            current_dist = distanceTwoCoords(ref_point, mapped_block_data[j][0])
+            next_dist = distanceTwoCoords(ref_point, mapped_block_data[j + 1][0])
+            
+            # Swap if the next block is closer to the reference point than the current block
+            if next_dist < current_dist:
+                swapped = True
+                mapped_block_data[j], mapped_block_data[j + 1] = mapped_block_data[j + 1], mapped_block_data[j]
+
+        # Break the loop if no swap happened in this pass
+        if not swapped:
+            break
+
+# This sorts the block array, by distance, similar to the function before, 
+# but does this layer by layer (y-axis) layers, starting from the lowest, and working upwards.
+def sortBlockDataIncrementingY(mapped_block_data):
+    # Group blocks by Y-coordinate
+    groups = defaultdict(list)
+    for coord, block_name, block_damage in mapped_block_data:
+        groups[coord[1]].append((coord, block_name, block_damage))
+
+    sorted_data = []
+    for y in sorted(groups.keys()):
+        # Sort each group using nearest neighbor in 2D (ignoring Y)
+        unvisited = groups[y]
+        current = unvisited.pop(0)
+        sorted_group = [current]
+        while unvisited:
+            last_coord = sorted_group[-1][0]
+            closest_index = min(range(len(unvisited)), key=lambda i: distance_2d(last_coord, unvisited[i][0]))
+            sorted_group.append(unvisited.pop(closest_index))
+        sorted_data.extend(sorted_group)
+
+    return sorted_data
 
 def generate_lua_script(mapped_block_data, filename):
     # Count block types and quantities
@@ -267,12 +349,16 @@ def generate_lua_script(mapped_block_data, filename):
         "local function pickUpBlocks()",
         "  turtle.turnRight()",
         "  turtle.turnRight()",
-        "  -- Assuming the chest is directly to the back of the turtle",
+        "  turtle.forward()",
+        "  turtle.forward()",        
+        "  -- Assuming the chest is directly behind the turtle, with a two block gap",
         "  for i = 1, 16 do",
         "    turtle.suck()",
         "  end",
         "  turtle.turnLeft()  -- Turn back to original direction",
         "  turtle.turnLeft()",
+        "  turtle.forward()",
+        "  turtle.forward()",
         "end",
         "",
         "local placedBlocks = {}",
@@ -283,6 +369,8 @@ def generate_lua_script(mapped_block_data, filename):
         "  moveTo(0, 0, 0)  -- Move to chest location",
         "  turtle.turnRight()",
         "  turtle.turnRight()",
+        "  turtle.forward()",
+        "  turtle.forward()",
 #        "  for blockKey, totatlNeeded in pairs(block_counts) do",
 #        "    local blockName, blockDamage = unpack(blockKey)",
 #        "    local placed = placedBlocks[blockName] or 0",
@@ -301,6 +389,8 @@ def generate_lua_script(mapped_block_data, filename):
         "  end",
         "  turtle.turnLeft()",
         "  turtle.turnLeft()",
+        "  turtle.forward()",
+        "  turtle.forward()",
         "  moveTo(lastX, lastY, lastZ)  -- Return to the last building position",
         "end",
         "local function outOfStock()",
@@ -309,6 +399,8 @@ def generate_lua_script(mapped_block_data, filename):
         "  moveTo(0, 0, 0)  -- Move to chest location",
         "  turtle.turnRight()",
         "  turtle.turnRight()",
+        "  turtle.forward()",
+        "  turtle.forward()",
         "  while currentDir ~= 0 do",
         "   turnLeft()",
         "  end",
@@ -319,6 +411,8 @@ def generate_lua_script(mapped_block_data, filename):
         "  end",
         "  turtle.turnLeft()",
         "  turtle.turnLeft()",
+        "  turtle.forward()",
+        "  turtle.forward()",
         "  moveTo(lastX, lastY, lastZ)  -- Return to the last building position",
         "end",
     ]
@@ -342,7 +436,7 @@ def generate_lua_script(mapped_block_data, filename):
     lua_lines.append("print('Picking up blocks...')")
     lua_lines.append("pickUpBlocks()")
     lua_lines.append("print('Blocks picked up, starting to build...')")
-
+    
 
     # Add building instructions
     for (x, y, z), block_name, block_damage in mapped_block_data:
@@ -358,33 +452,14 @@ def generate_lua_script(mapped_block_data, filename):
         lua_lines.append("turtle.placeDown()")
         lua_lines.append(f"placedBlocks['{block_name}'] = (placedBlocks['{block_name}'] or 0) + 1")
 
+    lua_lines.append("print('Completed')")
+
     # Write the Lua script to a file
     with open(filename, 'w') as file:
         for line in lua_lines:
             file.write(line + '\n')
 
     print(f"Lua script written to {filename}")
-
-def main():
-
-    while True:
-        schematic_file = input("Enter the name of the schematic file, do not forget the file extension: ")
-        if os.path.exists(schematic_file):
-            break
-        else:
-            print("File not found. Please enter a valid file name.")
-
-    file_path = 'minecraftIDs.txt' 
-    block_id_mapping = create_block_mapping(file_path) # Now block_id_mapping contains a dictionary where keys are ID numbers and values are tuples (Minecraft name, data value)
-
-    schematic = read_schematic(schematic_file)
-    blockData = extract_block_data(schematic)
-
-    mappedData = map_block_data_to_names(blockData, block_id_mapping)
-
-    generate_lua_script(mappedData, 'buildSchematic.lua')
-
-    input("Script generated. RETURN to exit...")
 
 if __name__ == "__main__":
     main()

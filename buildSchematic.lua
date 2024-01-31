@@ -155,12 +155,16 @@ end
 local function pickUpBlocks()
   turtle.turnRight()
   turtle.turnRight()
-  -- Assuming the chest is directly to the back of the turtle
+  turtle.forward()
+  turtle.forward()
+  -- Assuming the chest is directly behind the turtle, with a two block gap
   for i = 1, 16 do
     turtle.suck()
   end
   turtle.turnLeft()  -- Turn back to original direction
   turtle.turnLeft()
+  turtle.forward()
+  turtle.forward()
 end
 
 local placedBlocks = {}
@@ -171,6 +175,8 @@ local function restockBlocks()
   moveTo(0, 0, 0)  -- Move to chest location
   turtle.turnRight()
   turtle.turnRight()
+  turtle.forward()
+  turtle.forward()
   while currentDir ~= 0 do
    turnLeft()
   end
@@ -179,6 +185,8 @@ local function restockBlocks()
   end
   turtle.turnLeft()
   turtle.turnLeft()
+  turtle.forward()
+  turtle.forward()
   moveTo(lastX, lastY, lastZ)  -- Return to the last building position
 end
 local function outOfStock()
@@ -187,6 +195,8 @@ local function outOfStock()
   moveTo(0, 0, 0)  -- Move to chest location
   turtle.turnRight()
   turtle.turnRight()
+  turtle.forward()
+  turtle.forward()
   while currentDir ~= 0 do
    turnLeft()
   end
@@ -197,6 +207,8 @@ local function outOfStock()
   end
   turtle.turnLeft()
   turtle.turnLeft()
+  turtle.forward()
+  turtle.forward()
   moveTo(lastX, lastY, lastZ)  -- Return to the last building position
 end
 print('Block minecraft:stone with damage 6: 126 blocks')
@@ -216,17 +228,6 @@ if not selectBlock('minecraft:stone', 6) then
   end
 end
 moveTo(0, 0, 0)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(10, 0, 0)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -358,7 +359,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(0, 0, 2)
+moveTo(10, 0, 0)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -380,29 +381,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(0, 0, 3)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
 moveTo(10, 0, 3)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(0, 0, 4)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -424,29 +403,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(0, 0, 5)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
 moveTo(10, 0, 5)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(0, 0, 6)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -468,29 +425,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(0, 0, 7)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
 moveTo(10, 0, 7)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(0, 0, 8)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -512,29 +447,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(0, 0, 9)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
 moveTo(10, 0, 9)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(0, 0, 10)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -556,95 +469,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(0, 0, 11)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(1, 0, 11)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(2, 0, 11)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(3, 0, 11)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(4, 0, 11)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(5, 0, 11)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(6, 0, 11)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(7, 0, 11)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(8, 0, 11)
+moveTo(10, 0, 11)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -666,7 +491,194 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(10, 0, 11)
+moveTo(8, 0, 11)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(7, 0, 11)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(6, 0, 11)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(5, 0, 11)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(4, 0, 11)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(3, 0, 11)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(2, 0, 11)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(1, 0, 11)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(0, 0, 11)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(0, 0, 10)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(0, 0, 9)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(0, 0, 8)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(0, 0, 7)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(0, 0, 6)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(0, 0, 5)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(0, 0, 4)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(0, 0, 3)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(0, 0, 2)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -678,17 +690,6 @@ if not selectBlock('minecraft:stone', 6) then
   end
 end
 moveTo(0, 1, 0)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(10, 1, 0)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -721,40 +722,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(9, 1, 1)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(10, 1, 1)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
 moveTo(0, 1, 2)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(10, 1, 2)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:glass', 0) then
@@ -853,17 +821,6 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(10, 1, 10)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
 moveTo(0, 1, 11)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
@@ -908,7 +865,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(0, 2, 0)
+moveTo(10, 1, 10)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -919,7 +876,51 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(10, 2, 0)
+moveTo(10, 1, 2)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(10, 1, 1)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(10, 1, 0)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(9, 1, 1)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(0, 2, 0)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -952,28 +953,6 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(9, 2, 1)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(10, 2, 1)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
 moveTo(0, 2, 2)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
@@ -985,29 +964,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(10, 2, 2)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
 moveTo(0, 2, 10)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(10, 2, 10)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -1062,7 +1019,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(0, 3, 0)
+moveTo(10, 2, 10)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -1073,7 +1030,51 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(10, 3, 0)
+moveTo(10, 2, 2)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(10, 2, 1)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(10, 2, 0)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(9, 2, 1)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(0, 3, 0)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -1106,28 +1107,6 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(9, 3, 1)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(10, 3, 1)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
 moveTo(0, 3, 2)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
@@ -1139,29 +1118,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(10, 3, 2)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
 moveTo(0, 3, 10)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(10, 3, 10)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -1216,7 +1173,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(0, 4, 0)
+moveTo(10, 3, 10)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -1227,7 +1184,51 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(10, 4, 0)
+moveTo(10, 3, 2)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(10, 3, 1)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(10, 3, 0)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(9, 3, 1)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(0, 4, 0)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -1260,28 +1261,6 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(9, 4, 1)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(10, 4, 1)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
 moveTo(0, 4, 2)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
@@ -1293,29 +1272,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(10, 4, 2)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
 moveTo(0, 4, 10)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(10, 4, 10)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -1370,7 +1327,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(0, 5, 0)
+moveTo(10, 4, 10)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -1381,7 +1338,51 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(10, 5, 0)
+moveTo(10, 4, 2)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(10, 4, 1)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(10, 4, 0)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(9, 4, 1)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(0, 5, 0)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -1414,28 +1415,6 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(9, 5, 1)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(10, 5, 1)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
 moveTo(0, 5, 2)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
@@ -1447,29 +1426,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(10, 5, 2)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
 moveTo(0, 5, 10)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(10, 5, 10)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -1524,7 +1481,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(0, 6, 0)
+moveTo(10, 5, 10)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -1535,7 +1492,51 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(10, 6, 0)
+moveTo(10, 5, 2)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(10, 5, 1)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(10, 5, 0)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(9, 5, 1)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(0, 6, 0)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -1568,28 +1569,6 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(9, 6, 1)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(10, 6, 1)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
 moveTo(0, 6, 2)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
@@ -1601,29 +1580,7 @@ if not selectBlock('minecraft:stone', 6) then
     outOfStock()
   end
 end
-moveTo(10, 6, 2)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
 moveTo(0, 6, 10)
-turtle.placeDown()
-placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
-if not selectBlock('minecraft:stone', 6) then
-  restockBlocks()
-  if not selectBlock('minecraft:stone', 6) then
-    print('Error: Block not found:')
-    print('minecraft:stone')
-    outOfStock()
-  end
-end
-moveTo(10, 6, 10)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
 if not selectBlock('minecraft:stone', 6) then
@@ -1670,3 +1627,59 @@ end
 moveTo(10, 6, 11)
 turtle.placeDown()
 placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(10, 6, 10)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(10, 6, 2)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(10, 6, 1)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(10, 6, 0)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+if not selectBlock('minecraft:stone', 6) then
+  restockBlocks()
+  if not selectBlock('minecraft:stone', 6) then
+    print('Error: Block not found:')
+    print('minecraft:stone')
+    outOfStock()
+  end
+end
+moveTo(9, 6, 1)
+turtle.placeDown()
+placedBlocks['minecraft:stone'] = (placedBlocks['minecraft:stone'] or 0) + 1
+print('Completed')

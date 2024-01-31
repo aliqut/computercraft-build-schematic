@@ -266,19 +266,72 @@ def generate_lua_script(mapped_block_data, filename):
         "",
         "local function pickUpBlocks()",
         "  turtle.turnRight()",
-        "  -- Assuming the chest is directly to the right of the turtle",
+        "  turtle.turnRight()",
+        "  -- Assuming the chest is directly to the back of the turtle",
         "  for i = 1, 16 do",
         "    turtle.suck()",
         "  end",
         "  turtle.turnLeft()  -- Turn back to original direction",
+        "  turtle.turnLeft()",
+        "end",
+        "",
+        "local placedBlocks = {}",
+        "",
+        "local function restockBlocks()",
+        "  local lastX, lastY, lastZ = currentX, currentY, currentZ",  # Save the last position
+        "  print('Restocking...')",
+        "  moveTo(0, 0, 0)  -- Move to chest location",
+        "  turtle.turnRight()",
+        "  turtle.turnRight()",
+#        "  for blockKey, totatlNeeded in pairs(block_counts) do",
+#        "    local blockName, blockDamage = unpack(blockKey)",
+#        "    local placed = placedBlocks[blockName] or 0",
+#        "    local toPickUp = math.min(64, totalNeeded - placed)",
+#        "    if toPickUp > 0 then",
+#        "      for i = 1, toPickUp do",
+#        "        turtle.suck()  -- Adjust as needed to pick up specific blocks",
+#        "      end",
+#        "    end",
+#        "  end",
+        "  while currentDir ~= 0 do",
+        "   turnLeft()",
+        "  end",
+        "  for i = 1, 16 do",
+        "    turtle.suck()",
+        "  end",
+        "  turtle.turnLeft()",
+        "  turtle.turnLeft()",
+        "  moveTo(lastX, lastY, lastZ)  -- Return to the last building position",
+        "end",
+        "local function outOfStock()",
+        "  local lastX, lastY, lastZ = currentX, currentY, currentZ",  # Save the last position
+        "  print('Out of stock, returning to chest...')",
+        "  moveTo(0, 0, 0)  -- Move to chest location",
+        "  turtle.turnRight()",
+        "  turtle.turnRight()",
+        "  while currentDir ~= 0 do",
+        "   turnLeft()",
+        "  end",
+        "  print('Please refill chest, then press any key to continue...')",
+        "  os.pullEvent('key')",
+        "  for i = 1, 16 do",
+        "    turtle.suck()",
+        "  end",
+        "  turtle.turnLeft()",
+        "  turtle.turnLeft()",
+        "  moveTo(lastX, lastY, lastZ)  -- Return to the last building position",
         "end",
     ]
+
+    # Store total block counts needed for build
+    # lua_lines.append("local block_counts = {"),
+    # for (block_name, block_damage), count in block_counts.items():
+    #    lua_lines.append(f"  ['{block_name}', {block_damage}] = {count},")
+    # lua_lines.append("}")
 
     # Print out the list of blocks needed
     for (block_name, block_damage), count in block_counts.items():
         lua_lines.append(f"print('Block {block_name} with damage {block_damage}: {count} blocks')")
-
-    
 
     # Add user prompt
     lua_lines.append("print('Please organize the blocks in the chest as listed above.')")
@@ -293,12 +346,17 @@ def generate_lua_script(mapped_block_data, filename):
 
     # Add building instructions
     for (x, y, z), block_name, block_damage in mapped_block_data:
-        lua_lines.append(f"if selectBlock('{block_name}', {block_damage}) then")
-        lua_lines.append(f"  moveTo({x}, {y}, {z})")
-        lua_lines.append("  turtle.placeDown()")  # Adjust based on orientation
-        lua_lines.append("else")
-        lua_lines.append(f"  print('Error: Block {block_name} with damage {block_damage} not found.')")
+        lua_lines.append(f"if not selectBlock('{block_name}', {block_damage}) then")
+        lua_lines.append("  restockBlocks()")
+        lua_lines.append(f"  if not selectBlock('{block_name}', {block_damage}) then")
+        lua_lines.append("    print('Error: Block not found:')")
+        lua_lines.append(f"    print('{block_name}')")
+        lua_lines.append("    outOfStock()")
+        lua_lines.append("  end")
         lua_lines.append("end")
+        lua_lines.append(f"moveTo({x}, {y}, {z})")
+        lua_lines.append("turtle.placeDown()")
+        lua_lines.append(f"placedBlocks['{block_name}'] = (placedBlocks['{block_name}'] or 0) + 1")
 
     # Write the Lua script to a file
     with open(filename, 'w') as file:

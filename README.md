@@ -1,7 +1,8 @@
 # computercraft-build-schematic
-This program takes in a WorldEdit schematic file, and converts it to a Lua script with instructions for building, made for ComputerCraft Turtles.
+This is the source for a program takes in a WorldEdit schematic file, and converts it to a Lua script with instructions for building, made for ComputerCraft Turtles.
 
----
+## Contributing
+For contributions, fork this repo, and in your fork, make any modifications you want. Once you are done, make a pull request to contribute your changes to this repository.
 
 ## Prerequisites
 - Python ( [Link](https://www.python.org/downloads/) )
